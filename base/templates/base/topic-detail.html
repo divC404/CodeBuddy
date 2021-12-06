@@ -1,0 +1,52 @@
+{% extends 'main.html' %} {% block content %}
+<h2 class="title-topic">{{topic}} Questions from StackOverflow</h2>
+<div>
+  {% for question in questions %}
+  <a class="card-question" href="{{question.link}}">
+    <div class="card-title">
+      <h2 class="question">{{question.title}}</h2>
+    </div>
+  </a>
+  {%endfor%}
+</div>
+
+<hr />
+<hr />
+<h2 class="title-topic">{{topic}} Articles from dev.to</h2>
+<div>
+  {% for article in articles %}
+  <a class="card-question" href="{{article.url}}">
+    <div class="card-title">
+      <h2>{{article.title}}</h2>
+    </div>
+  </a>
+  {%endfor%}
+</div>
+<hr />
+<hr />
+<h2 class="title-topic">{{topic}} Videos from YouTube</h2>
+<div>
+  {% for video in videos %}
+  <a
+    class="card-question"
+    href="https://www.youtube.com/watch?v={{video.id.videoId}}"
+  >
+    <div class="card-title">
+      <h2>{{video.snippet.title}}</h2>
+    </div>
+  </a>
+  {%endfor%}
+</div>
+
+<script>
+  let questions = document.getElementsByClassName("question");
+  function decodeHtml(html) {
+    var txt = document.createElement("textarea");
+    txt.innerHTML = html;
+    return txt.value;
+  }
+  for (i = 0; i < questions.length; i++) {
+    questions[i].innerHTML = decodeHtml(questions[i].innerHTML);
+  }
+</script>
+{% endblock content %}

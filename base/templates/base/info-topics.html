@@ -1,0 +1,15 @@
+{% extends 'main.html' %}
+
+{% block content %}
+<h2 class="title">Coding Topics</h2>
+<div class="card-container">
+    {% for topic in topics %}
+        <a class="card" href="{% url 'topic-detail' topic.name %}">
+        {% comment %} <a class="card" href="#"> {% endcomment %}
+            <div class="card-title">
+                <h2>{{topic.name}}</h2>
+            </div>
+        </a>
+    {%endfor%}
+</div>
+{% endblock content %}

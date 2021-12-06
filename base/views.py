@@ -8,6 +8,9 @@ from .models import Room, Topic, Message, User
 from .forms import RoomForm, UserForm, MyUserCreationForm
 
 
+import requests
+
+
 def loginPage(request):
     page = 'login'
     if request.user.is_authenticated:
@@ -194,3 +197,32 @@ def topicsPage(request):
 def activityPage(request):
     room_messages = Message.objects.all()
     return render(request, 'base/activity.html', {'room_messages': room_messages})
+
+
+def infoTopics(request):
+    topics = Topic.objects.all()
+    topics = topics.exclude(name='Designers')
+    context = {
+        'topics': topics,
+    }
+    return render(request, 'base/info-topics.html', context)
+
+
+def topicDetails(request, pk):
+    response1 = requests.get(
+        f'https://api.stackexchange.com/2.3/questions?pagesize=5&order=desc&sort=votes&tagged={pk.lower()}&site=stackoverflow')
+    API_data1 = response1.json()
+    response2 = requests.get(
+        f'https://dev.to/api/articles?tag={pk.lower()}&per_page=5')
+    API_data2 = response2.json()
+    response3 = requests.get(
+        f'https://www.googleapis.com/youtube/v3/search?part=snippet&key=AIzaSyA8RO9d-WinPDt-ejQYYujK_CMWI0LGuTg&type=video&q={pk.lower()}')
+    API_data3 = response3.json()
+
+    context = {
+        'articles': API_data2,
+        'questions': API_data1["items"],
+        'videos': API_data3["items"],
+        'topic': pk,
+    }
+    return render(request, 'base/topic-detail.html', context)
